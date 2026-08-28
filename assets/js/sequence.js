@@ -54,6 +54,7 @@
       el.decoding = "async";
     }
     el.src = it.src;
+    if (!it.video) fig.style.setProperty("--shot", 'url("' + it.src + '")');
     fig.appendChild(el);
     stage.appendChild(fig);
     return { fig: fig, el: el, video: it.video, hold: it.hold };

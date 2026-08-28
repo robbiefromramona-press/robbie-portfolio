@@ -131,16 +131,37 @@ body.t-bland .stage { border: 1px solid #a89a70; box-shadow: 3px 3px 0 #b3a67f; 
   inset: 0;
   margin: 0;
   opacity: 0;
-  transition: opacity .7s var(--ease), transform 6s linear;
-  transform: scale(1.04);
+  transition: opacity .7s var(--ease);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
-.stage figure.is-live { opacity: 1; transform: scale(1); }
+.stage figure.is-live { opacity: 1; }
 
+/* Blurred copy of the same shot fills the frame behind it, so a
+   portrait photo on a wide screen doesn't sit in dead black bars. */
+.stage figure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--shot, none);
+  background-size: cover;
+  background-position: center;
+  filter: blur(34px) saturate(.65) brightness(.42);
+  transform: scale(1.15);
+}
+
+/* The real shot: whole image, centered, never cropped, never stretched. */
 .stage img, .stage video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   display: block;
+  box-shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 
 .stage-empty {
