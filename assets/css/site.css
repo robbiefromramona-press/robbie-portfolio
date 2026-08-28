@@ -1,0 +1,248 @@
+/* ==========================================================
+   ROBERT CLARKE — PORTFOLIO
+   One stylesheet. The look changes per page via body class.
+   That's the whole idea: it starts bland and earns its polish.
+   ========================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --ink: #16181d;
+  --paper: #e9e6dd;
+  --accent: #7a7f88;
+  --muted: #6b7079;
+  --stage: #0d0f12;
+  --display: "Oswald", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --shell-pad: clamp(16px, 3vw, 40px);
+  --ease: cubic-bezier(.2, .7, .3, 1);
+}
+
+/* ---------- ERA THEMES ---------------------------------- */
+
+/* 00 — Intro. Neutral, confident, sets the table. */
+body.t-intro   { --ink:#11141a; --paper:#dfe0e2; --accent:#c25b2e; --muted:#5d626b; --stage:#0b0d10; }
+
+/* 01 — The Early Years. Deliberately timid. Manila folder energy.
+   Yes, this is supposed to look cheap. That's the joke. */
+body.t-bland   { --ink:#3b3529; --paper:#d9cfae; --accent:#8a7c55; --muted:#736a52; --stage:#c8bd99;
+                 --display:Georgia,"Times New Roman",serif; --body:Georgia,"Times New Roman",serif; }
+
+/* 02 — The Troublesome Rookie. Same paper, louder, slightly off. */
+body.t-rookie  { --ink:#2b2a26; --paper:#cfc7ae; --accent:#9c4a22; --muted:#6e6a5c; --stage:#1c1a16; }
+
+/* 03 — The Hungry Apprentice. Grit arrives. Contrast climbs. */
+body.t-appr    { --ink:#e8e4da; --paper:#2a2723; --accent:#c8722b; --muted:#9a938a; --stage:#131210; }
+
+/* 04 — The Field Grunt. Full volume. Safety vest. */
+body.t-grunt   { --ink:#f2f0eb; --paper:#141414; --accent:#f0b400; --muted:#8e8b84; --stage:#000; }
+
+/* 05 — The Office Professional. Precision. Drawing-set blue. */
+body.t-office  { --ink:#0f1d2e; --paper:#eef2f7; --accent:#1c5fa8; --muted:#5a6b80; --stage:#0c1canvas;
+                 --stage:#0c1826; --display:"IBM Plex Sans",sans-serif; }
+
+/* 06 — The Dreamer. Soft landing. Warm, quiet, home. */
+body.t-dreamer { --ink:#2c2a33; --paper:#efe7e2; --accent:#b0705c; --muted:#7b737d; --stage:#221d22;
+                 --display:"IBM Plex Sans",sans-serif; }
+
+/* ---------- SHELL --------------------------------------- */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.55;
+  transition: background .6s var(--ease), color .6s var(--ease);
+}
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(10px, 2vw, 22px);
+  padding: var(--shell-pad) var(--shell-pad) 12px;
+  flex-wrap: wrap;
+}
+
+.masthead .era-no {
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .18em;
+  color: var(--accent);
+  border: 1px solid currentColor;
+  padding: 3px 8px;
+}
+
+.masthead h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4.2vw, 2.9rem);
+  line-height: .98;
+  letter-spacing: -.01em;
+  margin: 0;
+  text-transform: uppercase;
+}
+body.t-bland .masthead h1 { text-transform: none; font-weight: 400; letter-spacing: 0; }
+body.t-grunt .masthead h1 { letter-spacing: -.03em; }
+
+.masthead .years {
+  font-family: var(--mono);
+  font-size: .82rem;
+  color: var(--muted);
+  letter-spacing: .06em;
+}
+
+.skip {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.skip:hover { color: var(--ink); }
+
+/* ---------- STAGE (where media plays) -------------------- */
+
+.stage {
+  position: relative;
+  flex: 1;
+  margin: 0 var(--shell-pad);
+  background: var(--stage);
+  overflow: hidden;
+  min-height: 46vh;
+  display: grid;
+  place-items: center;
+}
+
+/* the bland era gets a sad little slide inset. on purpose. */
+body.t-bland .stage { border: 1px solid #a89a70; box-shadow: 3px 3px 0 #b3a67f; }
+
+.stage figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity .7s var(--ease), transform 6s linear;
+  transform: scale(1.04);
+}
+.stage figure.is-live { opacity: 1; transform: scale(1); }
+
+.stage img, .stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.stage-empty {
+  font-family: var(--mono);
+  font-size: .8rem;
+  letter-spacing: .1em;
+  color: #7d848e;
+  text-align: center;
+  padding: 2rem;
+  max-width: 46ch;
+}
+.stage-empty b { color: #b9c0ca; display: block; margin-bottom: .5rem; letter-spacing: .16em; }
+
+/* ---------- TRANSPORT ----------------------------------- */
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 18px);
+  padding: 14px var(--shell-pad);
+}
+
+.play {
+  width: 52px; height: 52px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1rem;
+  display: grid; place-items: center;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.play:hover { background: var(--ink); color: var(--paper); }
+.play:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.scrub {
+  flex: 1;
+  height: 3px;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  position: relative;
+  cursor: pointer;
+}
+.scrub-fill {
+  position: absolute; inset: 0 auto 0 0;
+  width: 0;
+  background: var(--accent);
+}
+.clock { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+
+/* ---------- ERA STRIP (the signature) -------------------
+   Seven segments, one per chapter. Fills as the audio runs.
+   Tells you where you are in a career, not just in a video. */
+
+.erastrip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 0 var(--shell-pad) var(--shell-pad);
+}
+.erastrip a {
+  position: relative;
+  text-decoration: none;
+  padding: 9px 6px 7px;
+  border-top: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: color .3s var(--ease), border-color .3s var(--ease);
+}
+.erastrip a:hover { color: var(--ink); border-top-color: var(--ink); }
+.erastrip a[aria-current="page"] { color: var(--ink); border-top-color: var(--accent); }
+.erastrip a[aria-current="page"]::after {
+  content: ""; position: absolute; left: 0; top: -2px; height: 2px;
+  width: var(--chapter-progress, 0%);
+  background: var(--accent);
+}
+
+/* ---------- SKILLS (page 5) ----------------------------- */
+
+.skills { padding: clamp(24px,5vw,56px) var(--shell-pad); border-top: 1px solid color-mix(in srgb,var(--ink) 15%,transparent); }
+.skills h2 { font-family: var(--display); font-size: clamp(1.2rem,3vw,1.8rem); margin: 0 0 1.2rem; text-transform: uppercase; letter-spacing: .02em; }
+.skillgrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 1px; background: color-mix(in srgb,var(--ink) 15%,transparent); border: 1px solid color-mix(in srgb,var(--ink) 15%,transparent); }
+.skillgrid div { background: var(--paper); padding: 16px 18px; }
+.skillgrid dt, .skillgrid strong { display:block; font-family: var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color: var(--accent); margin-bottom:6px; }
+.skillgrid p { margin: 0; font-size: .92rem; color: var(--ink); }
+
+/* ---------- MOTION / A11Y ------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .stage figure { transform: none !important; }
+}
+
+@media (max-width: 640px) {
+  .erastrip { grid-template-columns: repeat(7, 1fr); }
+  .erastrip a { font-size: 0; padding: 12px 2px; }
+  .skip { margin-left: 0; width: 100%; }
+}
