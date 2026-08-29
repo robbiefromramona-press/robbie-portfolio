@@ -1,14 +1,24 @@
 /* ============================================================
    SEQUENCE ENGINE
-   Audio is the clock. Media advances against it.
+   Two ways to build a page. Both work. Pick per page.
+
+   MODE A - one video (easiest):
+       p1: { video: "p1.mp4" }
+     Render the whole chapter in Blender with the narration
+     baked in. Drop the file. Done. No timing, no ordering.
+
+   MODE B - image sequence:
+       p0: { audio: "p0_audio.mp3", media: [ ... ] }
+     The audio is the clock and stills advance against it.
+
    You shouldn't need to touch this file.
    ============================================================ */
 
 (function () {
   "use strict";
 
-  var page  = document.body.dataset.page;          // "p0" .. "p6"
-  var conf  = (window.PORTFOLIO || {})[page] || { audio: null, media: [] };
+  var page  = document.body.dataset.page;
+  var conf  = (window.PORTFOLIO || {})[page] || {};
   var stage = document.querySelector(".stage");
   var audio = document.getElementById("narration");
   var btn   = document.querySelector(".play");
@@ -17,7 +27,101 @@
   var clock = document.querySelector(".clock");
   var here  = document.querySelector('.erastrip a[aria-current="page"]');
 
-  // Normalise "p1_01.jpg" and { src, hold } into one shape.
+  var timer = null;
+
+  function mmss(s) {
+    if (!isFinite(s)) return "0:00";
+    var m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return m + ":" + (r < 10 ? "0" : "") + r;
+  }
+
+  function emptyState(note) {
+    var msg = document.createElement("div");
+    msg.className = "stage-empty";
+    msg.innerHTML = "<b>Stage ready</b>" + note;
+    stage.appendChild(msg);
+    if (btn) btn.disabled = true;
+  }
+
+  function bindKeys() {
+    document.addEventListener("keydown", function (e) {
+      if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+      if (e.code === "Space" && btn && !btn.disabled) { e.preventDefault(); btn.click(); }
+      if (e.key === "ArrowRight") { var n = document.querySelector('link[rel="next"]'); if (n) location.href = n.href; }
+      if (e.key === "ArrowLeft")  { var p = document.querySelector('link[rel="prev"]'); if (p) location.href = p.href; }
+      if (e.key === "f" && timer && timer.requestFullscreen) timer.requestFullscreen();
+    });
+  }
+
+  function wire(el) {
+    timer = el;
+
+    el.addEventListener("timeupdate", function () {
+      var t = el.currentTime, d = el.duration || 0;
+      var pct = d ? (t / d) * 100 : 0;
+      if (fill)  fill.style.width = pct + "%";
+      if (here)  here.style.setProperty("--chapter-progress", pct + "%");
+      if (clock) clock.textContent = mmss(t) + " / " + mmss(d);
+      if (window.__onTick) window.__onTick(t, d);
+    });
+
+    el.addEventListener("loadedmetadata", function () {
+      if (clock) clock.textContent = "0:00 / " + mmss(el.duration);
+      if (window.__onMeta) window.__onMeta(el.duration);
+    });
+
+    el.addEventListener("ended", function () {
+      if (btn) btn.textContent = "\u25B6";
+      var next = document.querySelector('link[rel="next"]');
+      if (next) setTimeout(function () { location.href = next.href; }, 1400);
+    });
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        if (el.paused) {
+          el.play();
+          btn.textContent = "\u275A\u275A";
+          btn.setAttribute("aria-label", "Pause");
+        } else {
+          el.pause();
+          btn.textContent = "\u25B6";
+          btn.setAttribute("aria-label", "Play");
+        }
+      });
+    }
+
+    if (bar) {
+      bar.addEventListener("click", function (e) {
+        var r = bar.getBoundingClientRect();
+        if (el.duration) el.currentTime = ((e.clientX - r.left) / r.width) * el.duration;
+      });
+    }
+  }
+
+  /* ---------- MODE A: one video per chapter ---------- */
+  if (conf.video) {
+    var v = document.createElement("video");
+    v.src = "media/" + page + "/" + conf.video;
+    v.playsInline = true;
+    v.preload = "metadata";
+
+    var wrap = document.createElement("figure");
+    wrap.className = "is-live solo";
+    wrap.appendChild(v);
+    stage.appendChild(wrap);
+
+    v.addEventListener("error", function () {
+      stage.innerHTML = "";
+      emptyState("Couldn't load <code>media/" + page + "/" + conf.video +
+                 "</code>. Check the spelling and capitals match the file exactly.");
+    });
+
+    wire(v);
+    bindKeys();
+    return;
+  }
+
+  /* ---------- MODE B: audio clock + stills ---------- */
   var items = (conf.media || []).map(function (m) {
     var o = (typeof m === "string") ? { src: m } : m;
     return {
@@ -27,20 +131,15 @@
     };
   });
 
-  if (audio && conf.audio) audio.src = "media/" + page + "/" + conf.audio;
-
-  /* ---------- empty state: shell still works with no files ---------- */
   if (!items.length) {
-    var msg = document.createElement("div");
-    msg.className = "stage-empty";
-    msg.innerHTML = "<b>Stage ready</b>Drop your photos and clips into <code>media/" +
-      page + "/</code>, then list them in <code>assets/js/manifest.js</code>.";
-    stage.appendChild(msg);
-    if (btn) btn.disabled = true;
+    emptyState("Drop this chapter's video into <code>media/" + page +
+               "/</code>, then add it to <code>assets/js/manifest.js</code>.");
+    bindKeys();
     return;
   }
 
-  /* ---------- build the frames ---------- */
+  if (audio && conf.audio) audio.src = "media/" + page + "/" + conf.audio;
+
   var frames = items.map(function (it, i) {
     var fig = document.createElement("figure");
     var el;
@@ -52,19 +151,18 @@
       el.alt = "";
       el.loading = i < 2 ? "eager" : "lazy";
       el.decoding = "async";
+      fig.style.setProperty("--shot", 'url("' + it.src + '")');
     }
     el.src = it.src;
-    if (!it.video) fig.style.setProperty("--shot", 'url("' + it.src + '")');
     fig.appendChild(el);
     stage.appendChild(fig);
     return { fig: fig, el: el, video: it.video, hold: it.hold };
   });
 
-  var cuts = [];   // start time of each frame, in seconds
-  var current = -1;
+  var cuts = [], current = -1;
 
   function layout(total) {
-    if (!total || !isFinite(total)) total = items.length * 4; // sane fallback
+    if (!total || !isFinite(total)) total = items.length * 4;
     var fixed = 0, flex = 0;
     items.forEach(function (it) { it.hold ? (fixed += it.hold) : flex++; });
     var each = flex ? Math.max(0.8, (total - fixed) / flex) : 0;
@@ -84,61 +182,19 @@
       frames[i].el.currentTime = 0;
       frames[i].el.play().catch(function () {});
     }
-    // warm the next one up
     var nxt = frames[i + 1];
     if (nxt && nxt.el.preload === "none") nxt.el.preload = "auto";
   }
 
-  function mmss(s) {
-    if (!isFinite(s)) return "0:00";
-    var m = Math.floor(s / 60), r = Math.floor(s % 60);
-    return m + ":" + (r < 10 ? "0" : "") + r;
-  }
+  window.__onMeta = function (d) { layout(d); };
+  window.__onTick = function (t) {
+    for (var i = cuts.length - 1; i >= 0; i--) {
+      if (t >= cuts[i]) { show(i); break; }
+    }
+  };
 
-  /* ---------- wire it up ---------- */
   layout(0);
   show(0);
-
-  if (audio) {
-    audio.addEventListener("loadedmetadata", function () { layout(audio.duration); });
-
-    audio.addEventListener("timeupdate", function () {
-      var t = audio.currentTime, d = audio.duration || 0;
-      for (var i = cuts.length - 1; i >= 0; i--) {
-        if (t >= cuts[i]) { show(i); break; }
-      }
-      var pct = d ? (t / d) * 100 : 0;
-      if (fill) fill.style.width = pct + "%";
-      if (here) here.style.setProperty("--chapter-progress", pct + "%");
-      if (clock) clock.textContent = mmss(t) + " / " + mmss(d);
-    });
-
-    audio.addEventListener("ended", function () {
-      if (btn) btn.textContent = "▶";
-      var next = document.querySelector('link[rel="next"]');
-      if (next) setTimeout(function () { location.href = next.href; }, 1200);
-    });
-
-    if (btn) {
-      btn.addEventListener("click", function () {
-        if (audio.paused) { audio.play(); btn.textContent = "❚❚"; btn.setAttribute("aria-label", "Pause"); }
-        else { audio.pause(); btn.textContent = "▶"; btn.setAttribute("aria-label", "Play"); }
-      });
-    }
-
-    if (bar) {
-      bar.addEventListener("click", function (e) {
-        var r = bar.getBoundingClientRect();
-        if (audio.duration) audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
-      });
-    }
-  }
-
-  /* ---------- keyboard ---------- */
-  document.addEventListener("keydown", function (e) {
-    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-    if (e.code === "Space" && btn && !btn.disabled) { e.preventDefault(); btn.click(); }
-    if (e.key === "ArrowRight") { var n = document.querySelector('link[rel="next"]'); if (n) location.href = n.href; }
-    if (e.key === "ArrowLeft")  { var p = document.querySelector('link[rel="prev"]'); if (p) location.href = p.href; }
-  });
+  if (audio) wire(audio);
+  bindKeys();
 })();

@@ -1,78 +1,68 @@
 /* ============================================================
-   MANIFEST — THIS IS THE ONLY FILE YOU NEED TO EDIT, ROBBIE.
+   MANIFEST — THE ONLY FILE YOU EDIT, ROBBIE.
 
-   For each page, list the media files in the order you want
-   them to appear. That's it. The order in this list IS the
-   order on screen.
+   THE EASY WAY (one video per chapter):
 
-   Rules:
-     - Files live in  media/p0/ , media/p1/ , media/p2/ ...
-     - Just write the filename. Don't write the folder.
-     - CAPITALS MATTER. "P0_01.png" and "p0_01.png" are two
-       different files as far as the live server is concerned.
-       Type the name exactly as it appears in the folder.
-     - Images: .jpg .png .webp     Clips: .mp4
-     - Audio: one file per page, named in "audio" below.
+       p1: { video: "p1.mp4" }
 
-   "hold" is how many seconds that shot stays on screen.
-   Anything without a "hold" splits the leftover time evenly.
+   Render the chapter in Blender with the narration baked in,
+   save it as media/p1/p1.mp4, and that's the whole job.
+   No timing, no photo ordering, no transcript.
 
-   Leave a list empty ( [] ) and that page shows a friendly
-   "nothing here yet" card instead of breaking.
+   Uncomment a line below as each chapter's video is ready.
+
+   CAPITALS MATTER. "P1.mp4" and "p1.mp4" are different files
+   to the live server. Type the name exactly as it appears in
+   the folder. Stick to lowercase and you'll never think
+   about it again.
    ============================================================ */
 
 window.PORTFOLIO = {
 
-  /* ---- INTRO — 31 seconds, timed to your transcript ----
-     Each hold below matches where you marked the shot in
-     P0_TRANSCRIPTION.txt. Nudge any number if a shot feels
-     rushed; the rest will still land because the audio is
-     the clock, not the images.                            */
+  /* 00 — INTRO
+     Currently the still-photo version, timed to your transcript.
+     When the Blender render is ready, comment out the block
+     below and use the one-liner instead:
+         p0: { video: "p0.mp4" },                              */
   p0: {
     audio: "P0_AUDIO.mp3",
     media: [
-      { src: "P0_01.png", hold: 2   },  // 0:00  "Good morning friends at ISAT and welcome."
-      { src: "p0_02.png", hold: 3   },  // 0:02  "Feel free to jump ahead or come along for the full ride."
+      { src: "P0_01.png", hold: 2   },  // 0:00  "Good morning friends at ISAT"
+      { src: "p0_02.png", hold: 3   },  // 0:02  "jump ahead or come along"
       { src: "p0_03.png", hold: 1   },  // 0:05  "Here we go."
-      { src: "p0_04.png", hold: 3   },  // 0:06  "This is Robert Clarke, electrician by trade,"
+      { src: "p0_04.png", hold: 3   },  // 0:06  "electrician by trade"
       { src: "p0_05.png", hold: 3   },  // 0:09  "total station nerd by obsession"
-      { src: "p0_06.png", hold: 5   },  // 0:12  "a guy who builds websites now" → "story of how a kid"
+      { src: "p0_06.png", hold: 5   },  // 0:12  "builds websites now"
       { src: "p0_07.png", hold: 2   },  // 0:17  "from Ramona"
       { src: "p0_08.png", hold: 1.5 },  // 0:19
       { src: "p0_09.png", hold: 3   },  // 0:20  "robotic layout gear on hospitals"
-      { src: "p0_10.png", hold: 1.5 },  // 0:23  "coordinating BIM on pharmaceutical labs"
-      { src: "p0_11.mp4", hold: 6   }   // 0:25  "arguing with an AI about font choices" → "Let's rewind."
+      { src: "p0_10.png", hold: 1.5 },  // 0:23  "BIM on pharmaceutical labs"
+      { src: "p0_11.mp4", hold: 6   }   // 0:25  "arguing with an AI about font choices"
     ]
   },
 
-  p1: {
-    audio: "p1_audio.mp3",
-    media: []
-  },
+  /* 01 — THE EARLY YEARS */
+  p1: {},
+  // p1: { video: "p1.mp4" },
 
-  p2: {
-    audio: "p2_audio.mp3",
-    media: []
-  },
+  /* 02 — THE TROUBLESOME ROOKIE */
+  p2: {},
+  // p2: { video: "p2.mp4" },
 
-  p3: {
-    audio: "p3_audio.mp3",
-    media: []
-  },
+  /* 03 — THE HUNGRY APPRENTICE */
+  p3: {},
+  // p3: { video: "p3.mp4" },
 
-  p4: {
-    audio: "p4_audio.mp3",
-    media: []
-  },
+  /* 04 — THE FIELD GRUNT */
+  p4: {},
+  // p4: { video: "p4.mp4" },
 
-  p5: {
-    audio: "p5_audio.mp3",
-    media: []
-  },
+  /* 05 — THE OFFICE PROFESSIONAL */
+  p5: {},
+  // p5: { video: "p5.mp4" },
 
-  p6: {
-    audio: "p6_audio.mp3",
-    media: []
-  }
+  /* 06 — THE DREAMER */
+  p6: {}
+  // p6: { video: "p6.mp4" },
 
 };

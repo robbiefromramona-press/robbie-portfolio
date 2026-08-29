@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoCAD — Media | Robert Clarke</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #0a0a0c;
+    color: #eaeaea;
+    min-height: 100vh;
+  }
+  header {
+    padding: 48px 24px 24px;
+    text-align: center;
+    border-bottom: 1px solid #222;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    margin: 0 0 8px;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    color: #999;
+    margin: 0;
+  }
+  a.back {
+    display: inline-block;
+    margin-top: 16px;
+    color: #7ab8ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  a.back:hover { text-decoration: underline; }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .gallery figure {
+    margin: 0;
+    background: #141416;
+    border: 1px solid #232326;
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gallery figure img,
+  .gallery figure video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .placeholder-note {
+    text-align: center;
+    color: #666;
+    padding: 60px 20px;
+    border: 1px dashed #333;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>AutoCAD</h1>
+    <p>Drafting, layout sheets, and field-coordination drawings — pics &amp; clips.</p>
+    <a class="back" href="/">&larr; Back to portfolio</a>
+  </header>
+  <main>
+    <div class="gallery">
+      <!--
+        DROP-IN INSTRUCTIONS:
+        1. Put your image/video files in the SAME folder as this HTML file (e.g. a "revit" folder).
+        2. For each piece of media, copy one of the blocks below and change the filename.
+
+        Image example:
+        <figure><img src="your-image.jpg" alt="AutoCAD screenshot"></figure>
+
+        Video example:
+        <figure><video src="your-clip.mp4" controls muted></video></figure>
+      -->
+    </div>
+    <div class="placeholder-note" id="empty-note">
+      No media added yet — drop image/video files in this folder and follow the instructions in the HTML comment above to add them here.
+    </div>
+  </main>
+</body>
+</html>
