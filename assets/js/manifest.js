@@ -42,8 +42,8 @@ window.PORTFOLIO = {
   },
 
   /* 01 — THE EARLY YEARS */
-  p1: {},
-  // p1: { video: "p1.mp4" },
+
+   p1: { video: "p1.mp4" },
 
   /* 02 — THE TROUBLESOME ROOKIE */
   p2: {},
