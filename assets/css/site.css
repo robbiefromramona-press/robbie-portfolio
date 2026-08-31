@@ -118,7 +118,7 @@ body.t-grunt .masthead h1 { letter-spacing: -.03em; }
   margin: 0 var(--shell-pad);
   background: var(--stage);
   overflow: hidden;
-  min-height: 46vh;
+  min-height: 68vh;
   display: grid;
   place-items: center;
 }
