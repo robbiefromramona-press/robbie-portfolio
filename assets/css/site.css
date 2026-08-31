@@ -178,7 +178,7 @@ body.t-bland .stage { border: 1px solid #a89a70; box-shadow: 3px 3px 0 #b3a67f; 
 
 /* A whole chapter as one video: fill the stage, no blur backdrop needed. */
 .stage figure.solo::before { display: none; }
-.stage figure.solo video { width: 100%; height: 100%; max-width: none; max-height: none; box-shadow: none; }
+.stage figure.solo video { width: auto; height: auto; max-width: 82%; max-height: 82%; box-shadow: 0 18px 50px rgba(0,0,0,.45); }
 
 /* ---------- TRANSPORT ----------------------------------- */
 
