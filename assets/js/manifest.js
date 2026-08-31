@@ -24,42 +24,27 @@ window.PORTFOLIO = {
      When the Blender render is ready, comment out the block
      below and use the one-liner instead:
          p0: { video: "p0.mp4" },                              */
-  p0: {
-    audio: "P0_AUDIO.mp3",
-    media: [
-      { src: "P0_01.png", hold: 2   },  // 0:00  "Good morning friends at ISAT"
-      { src: "p0_02.png", hold: 3   },  // 0:02  "jump ahead or come along"
-      { src: "p0_03.png", hold: 1   },  // 0:05  "Here we go."
-      { src: "p0_04.png", hold: 3   },  // 0:06  "electrician by trade"
-      { src: "p0_05.png", hold: 3   },  // 0:09  "total station nerd by obsession"
-      { src: "p0_06.png", hold: 5   },  // 0:12  "builds websites now"
-      { src: "p0_07.png", hold: 2   },  // 0:17  "from Ramona"
-      { src: "p0_08.png", hold: 1.5 },  // 0:19
-      { src: "p0_09.png", hold: 3   },  // 0:20  "robotic layout gear on hospitals"
-      { src: "p0_10.png", hold: 1.5 },  // 0:23  "BIM on pharmaceutical labs"
-      { src: "p0_11.mp4", hold: 6   }   // 0:25  "arguing with an AI about font choices"
-    ]
-  },
+  p0: { video: "p0.mp4" },  
 
   /* 01 — THE EARLY YEARS */
 
    p1: { video: "p1.mp4" },
 
   /* 02 — THE TROUBLESOME ROOKIE */
-  p2: {},
-  // p2: { video: "p2.mp4" },
+  p2: { video: "p2.mp4" },
+  // 
 
   /* 03 — THE HUNGRY APPRENTICE */
-  p3: {},
-  // p3: { video: "p3.mp4" },
+  p3: {video: "p3.mp4"},
+  // p3: {  },
 
   /* 04 — THE FIELD GRUNT */
-  p4: {},
-  // p4: { video: "p4.mp4" },
+  p4: {video: "p4.mp4"},
+  // p4: {  },
 
   /* 05 — THE OFFICE PROFESSIONAL */
-  p5: {},
-  // p5: { video: "p5.mp4" },
+  p5: {video: "p5.mp4"},
+  // p5: {  },
 
   /* 06 — THE DREAMER */
   p6: {}
