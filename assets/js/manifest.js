@@ -47,7 +47,7 @@ window.PORTFOLIO = {
   // p5: {  },
 
   /* 06 — THE DREAMER */
-  p6: {}
-  // p6: { video: "p6.mp4" },
+  p6: { video: "p6.mp4"}
+  // p6: { },
 
 };
