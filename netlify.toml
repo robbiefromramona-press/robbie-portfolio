@@ -1,0 +1,39 @@
+# Added 2026-09-25 by the repo audit (see ../AUDIT-REPORT.md).
+#
+# This repo previously had no netlify.toml, which means the deploy settings
+# live in the Netlify UI. That is deliberately left alone: there is NO publish
+# key here, so whatever publish directory the UI is set to still applies. The
+# only thing this file adds is a build command.
+#
+# The command minifies the two JS files in place, in Netlify's own checkout,
+# on the way to publishing. Your source files are never touched by it.
+# Verified by running the minified site in a browser: no errors, the chapter
+# player still runs.
+#
+# BE HONEST ABOUT THIS ONE: it buys you nothing. This is a portfolio site and
+# the JS is a slideshow player -- there is no business logic to protect. It is
+# here only because the brief said "every repo shipping raw JS". If you would
+# rather not have a build step on a site that was working fine without one,
+# delete this file and nothing is lost.
+#
+# One side effect worth knowing: assets/js/manifest.js is the file you edit to
+# point chapters at videos, and it is mostly instructions and commented-out
+# examples. Those comments are stripped in the DEPLOYED copy only -- your
+# source keeps them.
+#
+# FIRST DEPLOY AFTER THIS LANDS: watch the deploy log. If the Netlify UI has a
+# "Base directory" set for this site, this file has to live in that directory
+# instead of the repo root, and the path below has to match.
+
+[build]
+  command = "npx --yes esbuild@0.25.0 assets/js/*.js --minify --allow-overwrite --outdir=assets/js"
+
+# ---- Password protection (free alternative to Netlify's Pro-only feature) ----
+# Runs on every request, before anything is served. The password itself is NOT
+# here: set BASIC_AUTH_CREDENTIALS in the Netlify dashboard for this site
+# (Site configuration > Environment variables), format  username:password
+# -- space-separated for several. With that variable unset this does nothing
+# and the site stays public. See netlify/edge-functions/basic-auth.ts.
+[[edge_functions]]
+  path = "/*"
+  function = "basic-auth"
